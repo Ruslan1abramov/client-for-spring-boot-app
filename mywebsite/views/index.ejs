@@ -45,7 +45,7 @@
             $scope.getOneItem = function (id) {
                 $scope.apiResponse = "";
                 $http.get('http://localhost:8080/items/' +id).then(function (response) {
-                    $scope.apiResponse = "Item: #"+ id + " " + JSON.stringify(response.data);
+                    $scope.apiResponse = "Item #"+ id + ": " + JSON.stringify(response.data);
                     console.log( $scope.apiResponse);
                 }).catch(console.error);
             }
