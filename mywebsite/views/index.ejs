@@ -29,7 +29,7 @@
                 <input type="number" data-ng-model="itemCode" placeholder="Enter items code" />
                 <button class="btn" ng-click="postOneItem(amount, itemCode, itemName)">Add item</button>
             </form>
-            <span>{{apiResponse | json}}</span>
+            <span>{{apiResponse }}</span>
         </div>
     <script>
         let app = angular.module('myApp', []);
@@ -37,7 +37,7 @@
             $scope.getAllItems = function(){
                 $scope.apiResponse = "";
                 $http.get('http://localhost:8080/items').then(function (response) {
-                    $scope.apiResponse = "Item List: " + response.data._embedded.itemList;
+                    $scope.apiResponse = "Item List: " + JSON.stringify(response.data._embedded.itemList);
                     console.log( $scope.apiResponse);
                 }).catch(console.error);
             }
@@ -45,7 +45,7 @@
             $scope.getOneItem = function (id) {
                 $scope.apiResponse = "";
                 $http.get('http://localhost:8080/items/' +id).then(function (response) {
-                    $scope.apiResponse = "Item: " + response.data;
+                    $scope.apiResponse = "Item: #"+ id + " " + JSON.stringify(response.data);
                     console.log( $scope.apiResponse);
                 }).catch(console.error);
             }
