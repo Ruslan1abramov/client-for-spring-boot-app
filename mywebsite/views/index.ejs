@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>demoClient</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    </head>
+    <body>
+        <div class="form-style-8" ng-app="myApp" ng-controller="myCtrl">
+            <h2>Client demo</h2>
+            <form name='getAll'>
+                <button class="btn" ng-click="getAllItems()">Get all items</button>
+            </form>
+            <form name='getOne'>
+                <input type="number" data-ng-model="gItemByID" placeholder="Enter Item code" />
+                <button class="btn" ng-click="getOneItem(gItemByID)">Get item</button>
+            </form>
+            <form name='putOne' >
+                <input type="number" data-ng-model="pItemByID" placeholder="Enter Item code" />
+                <input type="number" data-ng-model="changeItemAmount" placeholder="Amount to change" />
+                <button class="btn" ng-click="putOneItem(pItemByID, changeItemAmount)">Change item</button>
+            </form>
+            <form name='deleteOne' >
+                <input type="number" data-ng-model="removeItem" placeholder="Enter Item code" />
+                <button class="btn" ng-click="deleteOneItem(removeItem)">Remove item</button>
+            </form>
+            <form name='postOne'>
+                <input type="name" data-ng-model="itemName" placeholder="Enter item name" />
+                <input type="number" data-ng-model="amount" placeholder="Enter amount of items" />
+                <input type="number" data-ng-model="itemCode" placeholder="Enter items code" />
+                <button class="btn" ng-click="postOneItem(amount, itemCode, itemName)">Add item</button>
+            </form>    
+        </div>
+        <div ng-app="myApp" ng-controller="myCtrl">
+            <h4 ng-bind-html="apiResponse" ng-value="apiResponse"></h4>
+            <button class="btn" ng-click="ta()">TA</button>
+        </div>
+    <script>
+        let app = angular.module('myApp', []);
+        app.controller('myCtrl', function($scope, $http) {
+            $scope.getAllItems = function(){
+                $scope.apiResponse = "";
+                $http.get('http://localhost:8080/items').then(function (response) {
+                    $scope.apiResponse = response.data._embedded.itemList;
+                    console.log( $scope.apiResponse);
+                }).catch(console.error);
+            }
+
+            $scope.getOneItem = function (id) {
+                $scope.apiResponse = "";
+                $http.get('http://localhost:8080/items/' +id).then(function (response) {
+                    $scope.apiResponse = response.data;
+                    console.log( $scope.apiResponse);
+                }).catch(console.error);
+            }
+
+            $scope.postOneItem = function (amount, itemCode, itemName) {
+                $http.post('http://localhost:8080/items', {
+                    "amount": amount,
+                    "invCode": itemCode,
+                    "name": itemName
+                }).then(console.log.bind('ta')).catch(console.error);
+            }
+
+            $scope.putOneItem = function (id, amount) {
+                $http.put('http://localhost:8080/items/' +id, {
+                    "amount": amount,
+                }).then(console.log.bind('ta')).catch(console.error);
+            }
+
+            $scope.deleteOneItem = function (id) {
+                $http.delete('http://localhost:8080/items/' +id ).then(console.log.bind('ta')).catch(console.error);
+            }
+        });
+    </script>
+    </body>
+</html>
